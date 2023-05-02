@@ -1,0 +1,1 @@
+## Simple username and password manager using AES-128-CBC encryption that writes to json
