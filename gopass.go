@@ -219,15 +219,37 @@ func RandomBytes(num int) string {
 	return s
 }
 
+func CreateFile(path string) {
+	_, err := os.Stat(path)
+	if err != nil {
+		newFile, err := os.Create(path)
+		fmt.Printf(Yellow + "\nFile does not exist, creating the file now.... \n" + Reset)
+		if err != nil {
+			fmt.Println(err)
+		}
+		log.Printf(Green+"%s has been created"+Reset, path)
+		newFile.Close()
+	}
+}
+
+func DeleteFile(path string) {
+	err := os.Remove(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf(Red+"\n%s has been removed\n"+Reset, path)
+}
+
 func main() {
 	var key string
 	var input string
 	var path string
 	random := RandomBytes(16) // Generate a random key
-	fmt.Println(Green + "\nWelcome to the password manager, what json or txt file do you have?\n" + Reset)
+	fmt.Println(Green + "\nWelcome to the password manager, what json or txt file do you have or would like to create?\n" + Reset)
 	fmt.Scanln(&path)
+	CreateFile(path)
 	for {
-		fmt.Println(Yellow + "\n1: Add a username and password 2: Encrypt your password 3: Decrypt your password\n" + Reset)
+		fmt.Println(Yellow + "\n1: Add a username and password 2: Encrypt your file 3: Decrypt your password 4: Delete file 5: Exit\n" + Reset)
 		fmt.Println(Yellow + "Enter Your option: \n" + Reset)
 		fmt.Scanln(&input)
 
@@ -254,10 +276,14 @@ func main() {
 			}
 			Decrypt(key, path)
 		} else if numinput == 4 {
-			fmt.Println(Green + "\nThank you for using the password manager, exiting...\n" + Reset)
+			DeleteFile(path)
+			fmt.Println(Yellow + "\nThank you for using the password manager, if you would like to use another file, please reset the program!\n" + Reset)
+			break
+		} else if numinput == 5 {
+			fmt.Println(Yellow + "\nThank you for using the password manager, exiting...\n" + Reset)
 			break
 		} else {
-			fmt.Println(Red + "\nInvalid choice, please choice one of the given options" + Reset)
+			fmt.Println(Red + "\nInvalid choice, please choice one of the given options\n" + Reset)
 			continue
 		}
 	}
